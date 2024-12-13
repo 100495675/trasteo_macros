@@ -1,3 +1,5 @@
+use my_proc_macro::MyInteger;
+
 pub trait MyInteger: Clone + Copy {
     fn succ(self) -> impl MyInteger;
     fn add<N: MyInteger>(self, other: N) -> impl MyInteger;
@@ -8,31 +10,8 @@ pub trait MyInteger: Clone + Copy {
     fn to_int(self) -> i32;
 }
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, MyInteger)]
 pub struct Zero;
-impl MyInteger for Zero {
-    fn succ(self) -> impl MyInteger {
-        Succ(Zero)
-    }
-    fn add<N: MyInteger>(self, other: N) -> impl MyInteger {
-        other
-    }
-    fn mull<N: MyInteger>(self, _: N) -> impl MyInteger {
-        Zero
-    }
-    fn prev(self) -> impl MyInteger {
-        Prev(Zero)
-    }
-    fn neg(self) -> impl MyInteger {
-        Zero
-    }
-    fn sub<N: MyInteger>(self, other: N) -> impl MyInteger {
-        other.neg()
-    }
-    fn to_int(self) -> i32 {
-        0
-    }
-}
 
 #[derive(Clone, Copy)]
 pub struct Succ<N: MyInteger>(pub N);
