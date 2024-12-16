@@ -35,32 +35,32 @@ fn test_succ_negative() {
 }
 
 #[test]
-fn test_add_zero() {
-    assert_eq!(from_int!(0).add(from_int!(0)).to_int(), 0);
+fn test_my_add_zero() {
+    assert_eq!(from_int!(0).my_add(from_int!(0)).to_int(), 0);
 }
 
 #[test]
-fn test_add_positive_numbers() {
-    assert_eq!(from_int!(0).add(from_int!(1)).to_int(), 1);
-    assert_eq!(from_int!(0).add(from_int!(2)).to_int(), 2);
-    assert_eq!(from_int!(1).add(from_int!(0)).to_int(), 1);
-    assert_eq!(from_int!(1).add(from_int!(1)).to_int(), 2);
-    assert_eq!(from_int!(1).add(from_int!(2)).to_int(), 3);
-    assert_eq!(from_int!(2).add(from_int!(0)).to_int(), 2);
-    assert_eq!(from_int!(2).add(from_int!(1)).to_int(), 3);
-    assert_eq!(from_int!(2).add(from_int!(2)).to_int(), 4);
+fn test_my_add_positive_numbers() {
+    assert_eq!(from_int!(0).my_add(from_int!(1)).to_int(), 1);
+    assert_eq!(from_int!(0).my_add(from_int!(2)).to_int(), 2);
+    assert_eq!(from_int!(1).my_add(from_int!(0)).to_int(), 1);
+    assert_eq!(from_int!(1).my_add(from_int!(1)).to_int(), 2);
+    assert_eq!(from_int!(1).my_add(from_int!(2)).to_int(), 3);
+    assert_eq!(from_int!(2).my_add(from_int!(0)).to_int(), 2);
+    assert_eq!(from_int!(2).my_add(from_int!(1)).to_int(), 3);
+    assert_eq!(from_int!(2).my_add(from_int!(2)).to_int(), 4);
 }
 
 #[test]
-fn test_add_negative_numbers() {
-    assert_eq!(from_int!(0).add(from_int!(-1)).to_int(), -1);
-    assert_eq!(from_int!(0).add(from_int!(-2)).to_int(), -2);
-    assert_eq!(from_int!(-1).add(from_int!(0)).to_int(), -1);
-    assert_eq!(from_int!(-1).add(from_int!(-1)).to_int(), -2);
-    assert_eq!(from_int!(-1).add(from_int!(-2)).to_int(), -3);
-    assert_eq!(from_int!(-2).add(from_int!(0)).to_int(), -2);
-    assert_eq!(from_int!(-2).add(from_int!(-1)).to_int(), -3);
-    assert_eq!(from_int!(-2).add(from_int!(-2)).to_int(), -4);
+fn test_my_add_negative_numbers() {
+    assert_eq!(from_int!(0).my_add(from_int!(-1)).to_int(), -1);
+    assert_eq!(from_int!(0).my_add(from_int!(-2)).to_int(), -2);
+    assert_eq!(from_int!(-1).my_add(from_int!(0)).to_int(), -1);
+    assert_eq!(from_int!(-1).my_add(from_int!(-1)).to_int(), -2);
+    assert_eq!(from_int!(-1).my_add(from_int!(-2)).to_int(), -3);
+    assert_eq!(from_int!(-2).my_add(from_int!(0)).to_int(), -2);
+    assert_eq!(from_int!(-2).my_add(from_int!(-1)).to_int(), -3);
+    assert_eq!(from_int!(-2).my_add(from_int!(-2)).to_int(), -4);
 }
 
 #[test]
@@ -148,7 +148,7 @@ fn test_sub_negative_numbers() {
 #[test]
 fn test_chain_operations() {
     assert_eq!(
-        from_int!(1).add(from_int!(2)).mull(from_int!(3)).to_int(),
+        from_int!(1).my_add(from_int!(2)).mull(from_int!(3)).to_int(),
         9
     );
     assert_eq!(
@@ -156,7 +156,7 @@ fn test_chain_operations() {
         -3
     );
     assert_eq!(
-        from_int!(1).mull(from_int!(2).add(from_int!(3))).to_int(),
+        from_int!(1).mull(from_int!(2).my_add(from_int!(3))).to_int(),
         5
     );
     assert_eq!(
@@ -238,4 +238,28 @@ fn test_cmp_negative() {
     assert!(from_int!(-1) <= from_int!(-1));
     assert!(from_int!(-1) <= from_int!(0));
     assert!(from_int!(-1) <= from_int!(1));
+}
+
+#[test]
+fn test_add_zero() {
+    assert!(from_int!(0) + from_int!(0) == from_int!(0));
+
+    assert!(from_int!(0) + from_int!(1) == from_int!(1));
+    assert!(from_int!(0) + from_int!(-1) == from_int!(-1));
+}
+
+#[test]
+fn test_add_positive() {
+    assert!(from_int!(1) + from_int!(1) == from_int!(2));
+    assert!(from_int!(1) + from_int!(2) == from_int!(3));
+    assert!(from_int!(2) + from_int!(1) == from_int!(3));
+    assert!(from_int!(2) + from_int!(2) == from_int!(4));
+}
+
+#[test]
+fn test_add_negative() {
+    assert!(from_int!(-1) + from_int!(-1) == from_int!(-2));
+    assert!(from_int!(-1) + from_int!(-2) == from_int!(-3));
+    assert!(from_int!(-2) + from_int!(-1) == from_int!(-3));
+    assert!(from_int!(-2) + from_int!(-2) == from_int!(-4));
 }

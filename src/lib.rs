@@ -1,9 +1,9 @@
 use my_proc_macro::MyInteger;
-use std::cmp::Ordering;
+use std::{cmp::Ordering, ops::Add};
 
 pub trait MyInteger: Clone + Copy {
     fn succ(self) -> impl MyInteger;
-    fn add<N: MyInteger>(self, other: N) -> impl MyInteger;
+    fn my_add<N: MyInteger>(self, other: N) -> impl MyInteger;
     fn mull<N: MyInteger>(self, other: N) -> impl MyInteger;
     fn prev(self) -> impl MyInteger;
     fn neg(self) -> impl MyInteger;
@@ -20,11 +20,11 @@ impl<N: MyInteger> MyInteger for Succ<N> {
     fn succ(self) -> impl MyInteger {
         Succ(self)
     }
-    fn add<M: MyInteger>(self, other: M) -> impl MyInteger {
-        self.0.add(other).succ()
+    fn my_add<M: MyInteger>(self, other: M) -> impl MyInteger {
+        self.0.my_add(other).succ()
     }
     fn mull<M: MyInteger>(self, other: M) -> impl MyInteger {
-        self.0.mull(other).add(other)
+        self.0.mull(other).my_add(other)
     }
     fn prev(self) -> impl MyInteger {
         self.0
@@ -33,7 +33,7 @@ impl<N: MyInteger> MyInteger for Succ<N> {
         self.0.neg().prev()
     }
     fn sub<M: MyInteger>(self, other: M) -> impl MyInteger {
-        self.add(other.neg())
+        self.my_add(other.neg())
     }
     fn to_int(self) -> i32 {
         1 + self.0.to_int()
@@ -84,17 +84,29 @@ impl<N: MyInteger + Ord> Ord for Succ<N> {
     }
 }
 
+impl<N1, N2> Add<N2> for Succ<N1>
+where
+    N1: MyInteger + Add<N2>,
+    N2: MyInteger,
+    <N1 as Add<N2>>::Output: MyInteger,
+{
+    type Output = Succ<<N1 as Add<N2>>::Output>;
+    fn add(self, other: N2) -> Self::Output {
+        Succ(self.0 + other)
+    }
+}
+
 #[derive(Clone, Copy)]
 pub struct Prev<N: MyInteger>(pub N);
 impl<N: MyInteger> MyInteger for Prev<N> {
     fn succ(self) -> impl MyInteger {
         self.0
     }
-    fn add<M: MyInteger>(self, other: M) -> impl MyInteger {
-        self.0.add(other).prev()
+    fn my_add<M: MyInteger>(self, other: M) -> impl MyInteger {
+        self.0.my_add(other).prev()
     }
     fn mull<M: MyInteger>(self, other: M) -> impl MyInteger {
-        self.0.mull(other).add(other.neg())
+        self.0.mull(other).my_add(other.neg())
     }
     fn prev(self) -> impl MyInteger {
         Prev(self)
@@ -103,7 +115,7 @@ impl<N: MyInteger> MyInteger for Prev<N> {
         self.0.neg().succ()
     }
     fn sub<M: MyInteger>(self, other: M) -> impl MyInteger {
-        self.add(other.neg())
+        self.my_add(other.neg())
     }
     fn to_int(self) -> i32 {
         self.0.to_int() - 1
@@ -151,5 +163,17 @@ impl<N1: MyInteger, N2: MyInteger> PartialOrd<Succ<N2>> for Prev<N1> {
 impl<N: MyInteger + Ord> Ord for Prev<N> {
     fn cmp(&self, other: &Self) -> Ordering {
         self.partial_cmp(other).unwrap()
+    }
+}
+
+impl<N1, N2> Add<N2> for Prev<N1>
+where
+    N1: MyInteger + Add<N2>,
+    N2: MyInteger,
+    <N1 as Add<N2>>::Output: MyInteger,
+{
+    type Output = Prev<<N1 as Add<N2>>::Output>;
+    fn add(self, other: N2) -> Self::Output {
+        Prev(self.0 + other)
     }
 }

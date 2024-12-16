@@ -25,11 +25,11 @@ pub fn my_integer(input: TokenStream) -> TokenStream {
                 Succ(#name)
             }
 
-            fn add<N: MyInteger>(self, other: N) -> impl MyInteger {
+            fn my_add<N: MyInteger>(self, other: N) -> impl MyInteger {
                 other
             }
 
-            fn mull<N: MyInteger>(self, other: N) -> impl MyInteger {
+            fn mull<N: MyInteger>(self, _other: N) -> impl MyInteger {
                 #name
             }
 
@@ -91,6 +91,14 @@ pub fn my_integer(input: TokenStream) -> TokenStream {
         impl Ord for #name {
             fn cmp(&self, other: &#name) -> Ordering {
                 self.partial_cmp(other).unwrap()
+            }
+        }
+
+        impl<N: MyInteger> Add<N> for #name {
+            type Output = N;
+        
+            fn add(self, other: N) -> N {
+                other
             }
         }
     };
