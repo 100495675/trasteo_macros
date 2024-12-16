@@ -84,14 +84,33 @@ impl<N: MyInteger + Ord> Ord for Succ<N> {
     }
 }
 
-impl<N1, N2> Add<N2> for Succ<N1>
+impl<N1, N2> Add<Prev<N2>> for Succ<N1>
 where
     N1: MyInteger + Add<N2>,
     N2: MyInteger,
     <N1 as Add<N2>>::Output: MyInteger,
 {
-    type Output = Succ<<N1 as Add<N2>>::Output>;
-    fn add(self, other: N2) -> Self::Output {
+    type Output = <N1 as Add<N2>>::Output;
+    fn add(self, other: Prev<N2>) -> Self::Output {
+        self.0 + other.0
+    }
+}
+
+impl<N1: MyInteger> Add<Zero> for Succ<N1> {
+    type Output = Succ<N1>;
+    fn add(self, _other: Zero) -> Self::Output {
+        self
+    }
+}
+
+impl<N1, N2> Add<Succ<N2>> for Succ<N1>
+where
+    N1: MyInteger + Add<Succ<N2>>,
+    N2: MyInteger,
+    <N1 as Add<Succ<N2>>>::Output: MyInteger,
+{
+    type Output = Succ<<N1 as Add<Succ<N2>>>::Output>;
+    fn add(self, other: Succ<N2>) -> Self::Output {
         Succ(self.0 + other)
     }
 }
@@ -166,14 +185,33 @@ impl<N: MyInteger + Ord> Ord for Prev<N> {
     }
 }
 
-impl<N1, N2> Add<N2> for Prev<N1>
+impl<N1, N2> Add<Prev<N2>> for Prev<N1>
+where
+    N1: MyInteger + Add<Prev<N2>>,
+    N2: MyInteger,
+    <N1 as Add<Prev<N2>>>::Output: MyInteger,
+{
+    type Output = Prev<<N1 as Add<Prev<N2>>>::Output>;
+    fn add(self, other: Prev<N2>) -> Self::Output {
+        Prev(self.0 + other)
+    }
+}
+
+impl<N1: MyInteger> Add<Zero> for Prev<N1> {
+    type Output = Prev<N1>;
+    fn add(self, _other: Zero) -> Self::Output {
+        self
+    }
+}
+
+impl<N1, N2> Add<Succ<N2>> for Prev<N1>
 where
     N1: MyInteger + Add<N2>,
     N2: MyInteger,
     <N1 as Add<N2>>::Output: MyInteger,
 {
-    type Output = Prev<<N1 as Add<N2>>::Output>;
-    fn add(self, other: N2) -> Self::Output {
-        Prev(self.0 + other)
+    type Output = <N1 as Add<N2>>::Output;
+    fn add(self, other: Succ<N2>) -> Self::Output {
+        self.0 + other.0
     }
 }

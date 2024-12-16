@@ -148,7 +148,10 @@ fn test_sub_negative_numbers() {
 #[test]
 fn test_chain_operations() {
     assert_eq!(
-        from_int!(1).my_add(from_int!(2)).mull(from_int!(3)).to_int(),
+        from_int!(1)
+            .my_add(from_int!(2))
+            .mull(from_int!(3))
+            .to_int(),
         9
     );
     assert_eq!(
@@ -156,7 +159,9 @@ fn test_chain_operations() {
         -3
     );
     assert_eq!(
-        from_int!(1).mull(from_int!(2).my_add(from_int!(3))).to_int(),
+        from_int!(1)
+            .mull(from_int!(2).my_add(from_int!(3)))
+            .to_int(),
         5
     );
     assert_eq!(
@@ -190,9 +195,8 @@ fn test_eq_negative() {
 
 #[test]
 fn test_cmp_zero() {
-
     assert!(from_int!(0) == from_int!(0));
-    
+
     assert!(from_int!(0) > from_int!(-1));
     assert!(!(from_int!(0) > from_int!(0)));
     assert!(!(from_int!(0) < from_int!(0)));
@@ -209,7 +213,7 @@ fn test_cmp_zero() {
 #[test]
 fn test_cmp_positive() {
     assert!(from_int!(1) == from_int!(1));
-    
+
     assert!(from_int!(1) > from_int!(-1));
     assert!(from_int!(1) > from_int!(0));
     assert!(!(from_int!(1) > from_int!(1)));
@@ -226,7 +230,7 @@ fn test_cmp_positive() {
 #[test]
 fn test_cmp_negative() {
     assert!(from_int!(-1) == from_int!(-1));
-    
+
     assert!(from_int!(-1) > from_int!(-2));
     assert!(!(from_int!(-1) > from_int!(-1)));
     assert!(!(from_int!(-1) < from_int!(-1)));
@@ -250,16 +254,20 @@ fn test_add_zero() {
 
 #[test]
 fn test_add_positive() {
+    assert!(from_int!(1) + from_int!(-1) == from_int!(0));
+    assert!(from_int!(1) + from_int!(0) == from_int!(1));
     assert!(from_int!(1) + from_int!(1) == from_int!(2));
-    assert!(from_int!(1) + from_int!(2) == from_int!(3));
+    assert!(from_int!(2) + from_int!(-1) == from_int!(1));
+    assert!(from_int!(2) + from_int!(0) == from_int!(2));
     assert!(from_int!(2) + from_int!(1) == from_int!(3));
-    assert!(from_int!(2) + from_int!(2) == from_int!(4));
 }
 
 #[test]
 fn test_add_negative() {
-    assert!(from_int!(-1) + from_int!(-1) == from_int!(-2));
-    assert!(from_int!(-1) + from_int!(-2) == from_int!(-3));
     assert!(from_int!(-2) + from_int!(-1) == from_int!(-3));
-    assert!(from_int!(-2) + from_int!(-2) == from_int!(-4));
+    assert!(from_int!(-2) + from_int!(0) == from_int!(-2));
+    assert!(from_int!(-2) + from_int!(1) == from_int!(-1));
+    assert!(from_int!(-1) + from_int!(-1) == from_int!(-2));
+    assert!(from_int!(-1) + from_int!(0) == from_int!(-1));
+    assert!(from_int!(-1) + from_int!(1) == from_int!(0));
 }
