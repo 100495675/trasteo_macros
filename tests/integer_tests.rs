@@ -1,91 +1,5 @@
 use my_proc_macro::from_int;
-use trasteo_macros::{MyInteger, Prev, Succ, Zero};
-
-#[test]
-fn test_to_int_zero() {
-    assert_eq!(from_int!(0).to_int(), 0);
-}
-
-#[test]
-fn test_to_int_positive() {
-    assert_eq!(from_int!(1).to_int(), 1);
-    assert_eq!(from_int!(2).to_int(), 2);
-    assert_eq!(from_int!(3).to_int(), 3);
-}
-
-#[test]
-fn test_to_int_negative() {
-    assert_eq!(from_int!(-1).to_int(), -1);
-    assert_eq!(from_int!(-2).to_int(), -2);
-    assert_eq!(from_int!(-3).to_int(), -3);
-}
-
-#[test]
-fn test_succ_positive() {
-    assert_eq!(from_int!(0).succ().to_int(), 1);
-    assert_eq!(from_int!(1).succ().to_int(), 2);
-    assert_eq!(from_int!(2).succ().to_int(), 3);
-}
-
-#[test]
-fn test_succ_negative() {
-    assert_eq!(from_int!(-1).succ().to_int(), 0);
-    assert_eq!(from_int!(-2).succ().to_int(), -1);
-    assert_eq!(from_int!(-3).succ().to_int(), -2);
-}
-
-#[test]
-fn test_my_add_zero() {
-    assert_eq!(from_int!(0).my_add(from_int!(0)).to_int(), 0);
-}
-
-#[test]
-fn test_my_add_positive_numbers() {
-    assert_eq!(from_int!(0).my_add(from_int!(1)).to_int(), 1);
-    assert_eq!(from_int!(0).my_add(from_int!(2)).to_int(), 2);
-    assert_eq!(from_int!(1).my_add(from_int!(0)).to_int(), 1);
-    assert_eq!(from_int!(1).my_add(from_int!(1)).to_int(), 2);
-    assert_eq!(from_int!(1).my_add(from_int!(2)).to_int(), 3);
-    assert_eq!(from_int!(2).my_add(from_int!(0)).to_int(), 2);
-    assert_eq!(from_int!(2).my_add(from_int!(1)).to_int(), 3);
-    assert_eq!(from_int!(2).my_add(from_int!(2)).to_int(), 4);
-}
-
-#[test]
-fn test_my_add_negative_numbers() {
-    assert_eq!(from_int!(0).my_add(from_int!(-1)).to_int(), -1);
-    assert_eq!(from_int!(0).my_add(from_int!(-2)).to_int(), -2);
-    assert_eq!(from_int!(-1).my_add(from_int!(0)).to_int(), -1);
-    assert_eq!(from_int!(-1).my_add(from_int!(-1)).to_int(), -2);
-    assert_eq!(from_int!(-1).my_add(from_int!(-2)).to_int(), -3);
-    assert_eq!(from_int!(-2).my_add(from_int!(0)).to_int(), -2);
-    assert_eq!(from_int!(-2).my_add(from_int!(-1)).to_int(), -3);
-    assert_eq!(from_int!(-2).my_add(from_int!(-2)).to_int(), -4);
-}
-
-#[test]
-fn test_prev_positive() {
-    assert_eq!(from_int!(0).prev().to_int(), -1);
-    assert_eq!(from_int!(1).prev().to_int(), 0);
-    assert_eq!(from_int!(2).prev().to_int(), 1);
-}
-
-#[test]
-fn test_prev_negative() {
-    assert_eq!(from_int!(-1).prev().to_int(), -2);
-    assert_eq!(from_int!(-2).prev().to_int(), -3);
-    assert_eq!(from_int!(-3).prev().to_int(), -4);
-}
-
-#[test]
-fn test_neg() {
-    assert_eq!(from_int!(0).my_neg().to_int(), 0);
-    assert_eq!(from_int!(1).my_neg().to_int(), -1);
-    assert_eq!(from_int!(2).my_neg().to_int(), -2);
-    assert_eq!(from_int!(-1).my_neg().to_int(), 1);
-    assert_eq!(from_int!(-2).my_neg().to_int(), 2);
-    assert_eq!(from_int!(-3).my_neg().to_int(), 3);
-}
+use trasteo_macros::{prev::Prev, succ::Succ, zero::Zero};
 
 #[test]
 fn test_eq_zero() {
@@ -204,4 +118,32 @@ fn test_neg_positive() {
 fn test_neg_negative() {
     assert!(-from_int!(-1) == from_int!(1));
     assert!(-from_int!(-2) == from_int!(2));
+}
+
+#[test]
+fn test_into() {
+    let zero: i32 = from_int!(0).into();
+    assert_eq!(zero, 0);
+
+    let one: i32 = from_int!(1).into();
+    assert_eq!(one, 1);
+
+    let minus_one: i32 = from_int!(-1).into();
+    assert_eq!(minus_one, -1);
+}
+
+#[test]
+fn test_debug() {
+    assert_eq!(format!("{:?}", from_int!(0)), "Zero");
+    assert_eq!(format!("{:?}", from_int!(1)), "Succ(Zero)");
+    assert_eq!(format!("{:?}", from_int!(2)), "Succ(Succ(Zero))");
+    assert_eq!(format!("{:?}", from_int!(-1)), "Prev(Zero)");
+    assert_eq!(format!("{:?}", from_int!(-2)), "Prev(Prev(Zero))");
+}
+
+#[test]
+fn test_display() {
+    assert_eq!(format!("{}", from_int!(0)), "0");
+    assert_eq!(format!("{}", from_int!(1)), "1");
+    assert_eq!(format!("{}", from_int!(-1)), "-1");
 }
