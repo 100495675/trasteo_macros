@@ -187,3 +187,55 @@ fn test_eq_negative() {
     assert!(from_int!(-1) != from_int!(0));
     assert!(from_int!(-1) != from_int!(1));
 }
+
+#[test]
+fn test_cmp_zero() {
+
+    assert!(from_int!(0) == from_int!(0));
+    
+    assert!(from_int!(0) > from_int!(-1));
+    assert!(!(from_int!(0) > from_int!(0)));
+    assert!(!(from_int!(0) < from_int!(0)));
+    assert!(from_int!(0) < from_int!(1));
+
+    assert!(from_int!(0) >= from_int!(-2));
+    assert!(from_int!(0) >= from_int!(-1));
+    assert!(from_int!(0) >= from_int!(0));
+    assert!(from_int!(0) <= from_int!(0));
+    assert!(from_int!(0) <= from_int!(1));
+    assert!(from_int!(0) <= from_int!(2));
+}
+
+#[test]
+fn test_cmp_positive() {
+    assert!(from_int!(1) == from_int!(1));
+    
+    assert!(from_int!(1) > from_int!(-1));
+    assert!(from_int!(1) > from_int!(0));
+    assert!(!(from_int!(1) > from_int!(1)));
+    assert!(!(from_int!(1) < from_int!(1)));
+    assert!(from_int!(1) < from_int!(2));
+
+    assert!(from_int!(1) >= from_int!(-1));
+    assert!(from_int!(1) >= from_int!(0));
+    assert!(from_int!(1) >= from_int!(1));
+    assert!(from_int!(1) <= from_int!(1));
+    assert!(from_int!(1) <= from_int!(2));
+}
+
+#[test]
+fn test_cmp_negative() {
+    assert!(from_int!(-1) == from_int!(-1));
+    
+    assert!(from_int!(-1) > from_int!(-2));
+    assert!(!(from_int!(-1) > from_int!(-1)));
+    assert!(!(from_int!(-1) < from_int!(-1)));
+    assert!(from_int!(-1) < from_int!(0));
+    assert!(from_int!(-1) < from_int!(1));
+
+    assert!(from_int!(-1) >= from_int!(-2));
+    assert!(from_int!(-1) >= from_int!(-1));
+    assert!(from_int!(-1) <= from_int!(-1));
+    assert!(from_int!(-1) <= from_int!(0));
+    assert!(from_int!(-1) <= from_int!(1));
+}

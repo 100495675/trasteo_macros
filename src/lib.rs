@@ -1,4 +1,5 @@
 use my_proc_macro::MyInteger;
+use std::cmp::Ordering;
 
 pub trait MyInteger: Clone + Copy {
     fn succ(self) -> impl MyInteger;
@@ -57,6 +58,32 @@ impl<N: MyInteger> PartialEq<Zero> for Succ<N> {
     }
 }
 
+impl<N: MyInteger + Eq> Eq for Succ<N> {}
+
+impl<N: MyInteger> PartialOrd<Prev<N>> for Succ<N> {
+    fn partial_cmp(&self, _other: &Prev<N>) -> Option<Ordering> {
+        Some(Ordering::Greater)
+    }
+}
+
+impl<N: MyInteger> PartialOrd<Zero> for Succ<N> {
+    fn partial_cmp(&self, _other: &Zero) -> Option<Ordering> {
+        Some(Ordering::Greater)
+    }
+}
+
+impl<N1: MyInteger + PartialOrd<N2>, N2: MyInteger> PartialOrd<Succ<N2>> for Succ<N1> {
+    fn partial_cmp(&self, other: &Succ<N2>) -> Option<Ordering> {
+        Some(self.0.partial_cmp(&other.0).unwrap())
+    }
+}
+
+impl<N: MyInteger + Ord> Ord for Succ<N> {
+    fn cmp(&self, other: &Self) -> Ordering {
+        self.partial_cmp(other).unwrap()
+    }
+}
+
 #[derive(Clone, Copy)]
 pub struct Prev<N: MyInteger>(pub N);
 impl<N: MyInteger> MyInteger for Prev<N> {
@@ -98,5 +125,31 @@ impl<N1: MyInteger + PartialEq<N2>, N2: MyInteger> PartialEq<Prev<N2>> for Prev<
 impl<N: MyInteger> PartialEq<Zero> for Prev<N> {
     fn eq(&self, _other: &Zero) -> bool {
         false
+    }
+}
+
+impl<N: MyInteger + Eq> Eq for Prev<N> {}
+
+impl<N1: MyInteger + PartialOrd<N2>, N2: MyInteger> PartialOrd<Prev<N2>> for Prev<N1> {
+    fn partial_cmp(&self, other: &Prev<N2>) -> Option<Ordering> {
+        Some(self.0.partial_cmp(&other.0).unwrap())
+    }
+}
+
+impl<N: MyInteger> PartialOrd<Zero> for Prev<N> {
+    fn partial_cmp(&self, _other: &Zero) -> Option<Ordering> {
+        Some(Ordering::Less)
+    }
+}
+
+impl<N1: MyInteger, N2: MyInteger> PartialOrd<Succ<N2>> for Prev<N1> {
+    fn partial_cmp(&self, _other: &Succ<N2>) -> Option<Ordering> {
+        Some(Ordering::Less)
+    }
+}
+
+impl<N: MyInteger + Ord> Ord for Prev<N> {
+    fn cmp(&self, other: &Self) -> Ordering {
+        self.partial_cmp(other).unwrap()
     }
 }
