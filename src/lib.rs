@@ -39,6 +39,24 @@ impl<N: MyInteger> MyInteger for Succ<N> {
     }
 }
 
+impl<N1: MyInteger + PartialEq<N2>, N2: MyInteger> PartialEq<Succ<N2>> for Succ<N1> {
+    fn eq(&self, other: &Succ<N2>) -> bool {
+        self.0 == other.0
+    }
+}
+
+impl<N1: MyInteger, N2: MyInteger> PartialEq<Prev<N2>> for Succ<N1> {
+    fn eq(&self, _other: &Prev<N2>) -> bool {
+        false
+    }
+}
+
+impl<N: MyInteger> PartialEq<Zero> for Succ<N> {
+    fn eq(&self, _other: &Zero) -> bool {
+        false
+    }
+}
+
 #[derive(Clone, Copy)]
 pub struct Prev<N: MyInteger>(pub N);
 impl<N: MyInteger> MyInteger for Prev<N> {
@@ -62,5 +80,23 @@ impl<N: MyInteger> MyInteger for Prev<N> {
     }
     fn to_int(self) -> i32 {
         self.0.to_int() - 1
+    }
+}
+
+impl<N1: MyInteger, N2: MyInteger> PartialEq<Succ<N2>> for Prev<N1> {
+    fn eq(&self, _other: &Succ<N2>) -> bool {
+        false
+    }
+}
+
+impl<N1: MyInteger + PartialEq<N2>, N2: MyInteger> PartialEq<Prev<N2>> for Prev<N1> {
+    fn eq(&self, other: &Prev<N2>) -> bool {
+        self.0 == other.0
+    }
+}
+
+impl<N: MyInteger> PartialEq<Zero> for Prev<N> {
+    fn eq(&self, _other: &Zero) -> bool {
+        false
     }
 }

@@ -1,5 +1,5 @@
-use trasteo_macros::{MyInteger, Prev, Succ, Zero};
 use my_proc_macro::from_int;
+use trasteo_macros::{MyInteger, Prev, Succ, Zero};
 
 #[test]
 fn test_to_int_zero() {
@@ -163,4 +163,27 @@ fn test_chain_operations() {
         from_int!(1).mull(from_int!(2).sub(from_int!(3))).to_int(),
         -1
     );
+}
+
+#[test]
+fn test_eq_zero() {
+    assert!(from_int!(0) != from_int!(-1));
+    assert!(from_int!(0) == from_int!(0));
+    assert!(from_int!(0) != from_int!(1));
+}
+
+#[test]
+fn test_eq_positive() {
+    assert!(from_int!(1) != from_int!(-1));
+    assert!(from_int!(1) != from_int!(0));
+    assert!(from_int!(1) == from_int!(1));
+    assert!(from_int!(1) != from_int!(2));
+}
+
+#[test]
+fn test_eq_negative() {
+    assert!(from_int!(-1) != from_int!(-2));
+    assert!(from_int!(-1) == from_int!(-1));
+    assert!(from_int!(-1) != from_int!(0));
+    assert!(from_int!(-1) != from_int!(1));
 }

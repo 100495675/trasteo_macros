@@ -15,7 +15,6 @@ pub fn from_int(input: TokenStream) -> TokenStream {
     output.parse().expect("Failed to parse output")
 }
 
-
 #[proc_macro_derive(MyInteger)]
 pub fn my_integer(input: TokenStream) -> TokenStream {
     let ast: syn::DeriveInput = syn::parse(input).unwrap();
@@ -48,6 +47,24 @@ pub fn my_integer(input: TokenStream) -> TokenStream {
 
             fn to_int(self) -> i32 {
                 0
+            }
+        }
+
+        impl<N: MyInteger> PartialEq<Succ<N>> for #name {
+            fn eq(&self, _other: &Succ<N>) -> bool {
+                false
+            }
+        }
+        
+        impl<N: MyInteger> PartialEq<Prev<N>> for #name {
+            fn eq(&self, _other: &Prev<N>) -> bool {
+                false
+            }
+        }
+        
+        impl PartialEq for #name {
+            fn eq(&self, _other: &Self) -> bool {
+                true
             }
         }
     };
