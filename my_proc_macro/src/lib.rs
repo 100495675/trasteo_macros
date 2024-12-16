@@ -25,24 +25,8 @@ pub fn my_integer(input: TokenStream) -> TokenStream {
                 Succ(#name)
             }
 
-            fn my_add<N: MyInteger>(self, other: N) -> impl MyInteger {
-                other
-            }
-
-            fn mull<N: MyInteger>(self, _other: N) -> impl MyInteger {
-                #name
-            }
-
             fn prev(self) -> impl MyInteger {
                 Prev(#name)
-            }
-
-            fn neg(self) -> impl MyInteger {
-                #name
-            }
-
-            fn sub<N: MyInteger>(self, other: N) -> impl MyInteger {
-                other.neg()
             }
 
             fn to_int(self) -> i32 {
@@ -99,6 +83,14 @@ pub fn my_integer(input: TokenStream) -> TokenStream {
         
             fn add(self, other: N) -> N {
                 other
+            }
+        }
+
+        impl Neg for #name {
+            type Output = #name;
+        
+            fn neg(self) -> #name {
+                self
             }
         }
     };
