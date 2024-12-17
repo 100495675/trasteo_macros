@@ -2,9 +2,8 @@ use crate::{succ::Succ, zero::Zero};
 
 use std::{
     cmp::Ordering,
-    fmt::Debug,
-    fmt::Display,
-    ops::{Add, Neg},
+    fmt::{Debug, Display},
+    ops::{Add, Neg, Sub},
 };
 
 #[derive(Clone, Copy)]
@@ -115,5 +114,16 @@ where
     type Output = Succ<<N as Neg>::Output>;
     fn neg(self) -> Self::Output {
         Succ(self.0.neg())
+    }
+}
+
+impl<N1, N2> Sub<N2> for Prev<N1>
+where
+    Prev<N1>: Add<<N2 as Neg>::Output>,
+    N2: Neg,
+{
+    type Output = <Prev<N1> as Add<<N2 as Neg>::Output>>::Output;
+    fn sub(self, other: N2) -> Self::Output {
+        self + (-other)
     }
 }

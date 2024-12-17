@@ -147,3 +147,31 @@ fn test_display() {
     assert_eq!(format!("{}", from_int!(1)), "1");
     assert_eq!(format!("{}", from_int!(-1)), "-1");
 }
+
+#[test]
+fn test_sub_zero() {
+    assert!(from_int!(0) - from_int!(0) == from_int!(0));
+
+    assert!(from_int!(0) - from_int!(1) == from_int!(-1));
+    assert!(from_int!(0) - from_int!(-1) == from_int!(1));
+}
+
+#[test]
+fn test_sub_positive() {
+    assert!(from_int!(1) - from_int!(-1) == from_int!(2));
+    assert!(from_int!(1) - from_int!(0) == from_int!(1));
+    assert!(from_int!(1) - from_int!(1) == from_int!(0));
+    assert!(from_int!(2) - from_int!(-1) == from_int!(3));
+    assert!(from_int!(2) - from_int!(0) == from_int!(2));
+    assert!(from_int!(2) - from_int!(1) == from_int!(1));
+}
+
+#[test]
+fn test_sub_negative() {
+    assert!(from_int!(-2) - from_int!(-1) == from_int!(-1));
+    assert!(from_int!(-2) - from_int!(0) == from_int!(-2));
+    assert!(from_int!(-2) - from_int!(1) == from_int!(-3));
+    assert!(from_int!(-1) - from_int!(-1) == from_int!(0));
+    assert!(from_int!(-1) - from_int!(0) == from_int!(-1));
+    assert!(from_int!(-1) - from_int!(1) == from_int!(-2));
+}

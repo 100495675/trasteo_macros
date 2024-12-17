@@ -1,10 +1,9 @@
 use crate::{prev::Prev, succ::Succ};
-
 use std::{
     cmp::Ordering,
     fmt::Debug,
     fmt::Display,
-    ops::{Add, Neg},
+    ops::{Add, Neg, Sub},
 };
 
 #[derive(Clone, Copy)]
@@ -85,5 +84,16 @@ impl Neg for Zero {
 
     fn neg(self) -> Zero {
         self
+    }
+}
+
+impl<N> Sub<N> for Zero
+where
+    N: Neg,
+{
+    type Output = <N as Neg>::Output;
+
+    fn sub(self, other: N) -> Self::Output {
+        other.neg()
     }
 }
