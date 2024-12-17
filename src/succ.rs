@@ -99,11 +99,11 @@ impl<N1> Add<Zero> for Succ<N1> {
 
 impl<N1, N2> Add<Succ<N2>> for Succ<N1>
 where
-    N1: Add<Succ<N2>>,
+    Succ<N1>: Add<N2>,
 {
-    type Output = Succ<<N1 as Add<Succ<N2>>>::Output>;
+    type Output = Succ<<Succ<N1> as Add<N2>>::Output>;
     fn add(self, other: Succ<N2>) -> Self::Output {
-        Succ(self.0 + other)
+        Succ(self + other.0)
     }
 }
 

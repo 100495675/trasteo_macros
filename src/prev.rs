@@ -82,11 +82,11 @@ impl<N: Ord> Ord for Prev<N> {
 
 impl<N1, N2> Add<Prev<N2>> for Prev<N1>
 where
-    N1: Add<Prev<N2>>,
+    Prev<N1>: Add<N2>,
 {
-    type Output = Prev<<N1 as Add<Prev<N2>>>::Output>;
+    type Output = Prev<<Prev<N1> as Add<N2>>::Output>;
     fn add(self, other: Prev<N2>) -> Self::Output {
-        Prev(self.0 + other)
+        Prev(self + other.0)
     }
 }
 
@@ -117,16 +117,33 @@ where
     }
 }
 
-impl<N1, N2> Sub<N2> for Prev<N1>
+impl<N1, N2> Sub<Succ<N2>> for Prev<N1>
 where
-    Prev<N1>: Add<<N2 as Neg>::Output>,
-    N2: Neg,
+    Prev<N1>: Sub<N2>,
 {
-    type Output = <Prev<N1> as Add<<N2 as Neg>::Output>>::Output;
-    fn sub(self, other: N2) -> Self::Output {
-        self + (-other)
+    type Output = Prev<<Prev<N1> as Sub<N2>>::Output>;
+    fn sub(self, other: Succ<N2>) -> Self::Output {
+        Prev(self - other.0)
     }
 }
+
+impl<N> Sub<Zero> for Prev<N> {
+    type Output = Prev<N>;
+    fn sub(self, _other: Zero) -> Self::Output {
+        self
+    }
+}
+
+impl<N1, N2> Sub<Prev<N2>> for Prev<N1>
+where
+    N1: Sub<N2>,
+{
+    type Output = <N1 as Sub<N2>>::Output;
+    fn sub(self, other: Prev<N2>) -> Self::Output {
+        self.0 - other.0
+    }
+}
+
 
 impl<N1, N2> Mul<Prev<N2>> for Prev<N1>
 where
