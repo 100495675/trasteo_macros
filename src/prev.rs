@@ -3,7 +3,7 @@ use crate::{succ::Succ, zero::Zero};
 use std::{
     cmp::Ordering,
     fmt::{Debug, Display},
-    ops::{Add, Neg, Sub},
+    ops::{Add, Mul, Neg, Sub},
 };
 
 #[derive(Clone, Copy)]
@@ -125,5 +125,34 @@ where
     type Output = <Prev<N1> as Add<<N2 as Neg>::Output>>::Output;
     fn sub(self, other: N2) -> Self::Output {
         self + (-other)
+    }
+}
+
+impl<N1, N2> Mul<Prev<N2>> for Prev<N1>
+where
+    Prev<N1>: Mul<N2> + Clone,
+    <Prev<N1> as Mul<N2>>::Output: Sub<Prev<N1>>,
+{
+    type Output = <<Prev<N1> as Mul<N2>>::Output as Sub<Prev<N1>>>::Output;
+    fn mul(self, other: Prev<N2>) -> Self::Output {
+        self.clone() * other.0 - self
+    }
+}
+
+impl<N> Mul<Zero> for Prev<N> {
+    type Output = Zero;
+    fn mul(self, _other: Zero) -> Self::Output {
+        Zero
+    }
+}
+
+impl<N1, N2> Mul<Succ<N2>> for Prev<N1>
+where
+    Prev<N1>: Mul<N2> + Clone,
+    <Prev<N1> as Mul<N2>>::Output: Add<Prev<N1>>,
+{
+    type Output = <<Prev<N1> as Mul<N2>>::Output as Add<Prev<N1>>>::Output;
+    fn mul(self, other: Succ<N2>) -> Self::Output {
+        self.clone() * other.0 + self
     }
 }

@@ -1,9 +1,8 @@
 use crate::{prev::Prev, succ::Succ};
 use std::{
     cmp::Ordering,
-    fmt::Debug,
-    fmt::Display,
-    ops::{Add, Neg, Sub},
+    fmt::{Debug, Display},
+    ops::{Add, Mul, Neg, Sub},
 };
 
 #[derive(Clone, Copy)]
@@ -95,5 +94,13 @@ where
 
     fn sub(self, other: N) -> Self::Output {
         other.neg()
+    }
+}
+
+impl<N> Mul<N> for Zero {
+    type Output = Zero;
+
+    fn mul(self, _other: N) -> Self::Output {
+        Zero
     }
 }
